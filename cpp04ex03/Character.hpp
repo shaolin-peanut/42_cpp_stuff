@@ -6,6 +6,7 @@
 #define INC_42_CPP_STUFF_CHARACTER_HPP
 
 #include "ICharacter.hpp"
+#include "AMateria.hpp"
 
 class Character : public ICharacter
 {
@@ -15,10 +16,10 @@ public:
 	Character&	operator=(Character& rhs);
 	virtual ~Character();
 
-	virtual std::string const & getName();
-	virtual void equip(AMateria* m);
-	virtual void unequip(int idx);
-	virtual void use(int idx, ICharacter& target);
+	std::string const & getName() const;
+	void equip(AMateria* m);
+	void unequip(int idx);
+	void use(int idx, ICharacter& target);
 private:
 	std::string	_name;
 	AMateria*	inventory[4];

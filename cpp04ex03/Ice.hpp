@@ -11,10 +11,11 @@ class Ice : public AMateria
 {
 public:
 	Ice();
+	virtual ~Ice();
 	// todo: add the rest of the OCC
 
-	virtual AMateria* clone();
-	virtual void use(ICharacter& target);
+	AMateria* clone() const;
+	void use(ICharacter& target);
 };
 
 

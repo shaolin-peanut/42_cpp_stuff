@@ -8,13 +8,12 @@ Ice::Ice()
 : AMateria("ice")
 {}
 
-AMateria* Ice::clone()
+AMateria* Ice::clone() const
 {
-	AMateria *clone = new Ice;
-	return (clone);
+	return new Ice(*this);
 }
 
 void Ice::use(ICharacter& target)
 {
-	std::cout << "* shoots an ice bolt at " << /* todo: add target here << */ std::endl;
+	std::cout << "* shoots an ice bolt at " << target.getName() <<  " " << std::endl;
 }

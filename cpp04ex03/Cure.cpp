@@ -9,10 +9,9 @@ Cure::Cure()
 {}
 
 
-AMateria* Cure::clone()
+AMateria* Cure::clone() const
 {
-	AMateria *clone = new Cure;
-	return (clone);
+	return new Cure(*this);
 }
 
 void Cure::use(ICharacter& target)

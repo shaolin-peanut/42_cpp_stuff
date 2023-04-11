@@ -5,7 +5,8 @@
 #ifndef INC_42_CPP_STUFF_ICHARACTER_HPP
 #define INC_42_CPP_STUFF_ICHARACTER_HPP
 
-#include "AMateria.hpp"
+#include <iostream>
+class AMateria;
 
 class ICharacter
 {

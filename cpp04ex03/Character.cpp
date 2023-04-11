@@ -12,7 +12,7 @@ Character::Character(std::string name)
 }
 
 Character::Character(Character &copy) {
-	if (*this != copy)
+	if (this != &copy)
 	{
 		for (int i = 0; i < 4; i++) {
 			if (inventory[i])
@@ -24,18 +24,18 @@ Character::Character(Character &copy) {
 }
 
 Character &Character::operator=(Character &rhs) {
-	if (*this != rhs) {
+	if (this != &rhs) {
 		for (int i = 0; i < 4; i++) {
 			if (inventory[i])
 				inventory[i] = nullptr;
 			if (rhs.inventory[i])
 				inventory[i] = rhs.inventory[i]->clone();
 		}
-		return *this;
 	}
+	return *this;
 }
 
-const std::string &Character::getName() {
+const std::string &Character::getName() const {
 	return _name;
 }
 
