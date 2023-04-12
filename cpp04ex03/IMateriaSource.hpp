@@ -10,9 +10,9 @@
 class IMateriaSource {
 public:
 	IMateriaSource();
-	~IMateriaSource();
+	virtual ~IMateriaSource() {};
 	virtual void learnMateria(AMateria* learn)  = 0;
-	virtual AMateria* createMateria(std::string type) const = 0;
+	virtual AMateria* createMateria(std::string const type) = 0;
 };
 
 #endif //INC_42_CPP_STUFF_IMATERIASOURCE_HPP

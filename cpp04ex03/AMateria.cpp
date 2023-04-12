@@ -8,6 +8,12 @@ AMateria::AMateria(std::string const & type)
 : _type(type)
 {}
 
+AMateria::AMateria(const AMateria &src)
+: _type(src._type)
+{}
+
+AMateria::~AMateria() {}
+
 std::string const & AMateria::getType() const {
 	return _type;
 }

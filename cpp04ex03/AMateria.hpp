@@ -14,7 +14,10 @@ protected:
 	std::string	_type;
 public:
 	AMateria(std::string const & type);
+	AMateria(AMateria const & src);
 	virtual ~AMateria();
+
+	//AMateria & operator=(AMateria & const &rhs);
 	// add stuff
 	std::string const & getType() const; //Returns the materia type
 	virtual AMateria* clone() const = 0;

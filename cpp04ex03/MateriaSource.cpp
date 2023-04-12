@@ -4,21 +4,24 @@
 
 #include "MateriaSource.hpp"
 
-MateriaSource::MateriaSource() {
+MateriaSource::MateriaSource()
+{
 	for (int i = 0; i < 4; i++)
-		skill_stack[i] = nullptr;
+		skill_stack[i] = 0;
 }
 
-MateriaSource::~MateriaSource() {
+MateriaSource::~MateriaSource()
+{
 	for (int i = 0; i < 4; i++) {
-		if (skill_stack[i] != nullptr)
+		if (skill_stack[i] != 0)
 			delete skill_stack[i];
 	}
+	//IMateriaSource::~IMateriaSource();
 }
 
 void	MateriaSource::learnMateria(AMateria *learn) {
 	for (int i = 0; i < 4; i++) {
-		if (skill_stack[i] != nullptr) {
+		if (skill_stack[i] != 0) {
 			skill_stack[i] = learn;
 			return ;
 		}
@@ -27,10 +30,10 @@ void	MateriaSource::learnMateria(AMateria *learn) {
 	<< std::endl;
 }
 
-AMateria* MateriaSource::createMateria(std::string type) const {
+AMateria* MateriaSource::createMateria(std::string const type) {
 	for (int i = 0; i < 4; i++) {
 		if (skill_stack[i]->getType() == type)
 			return (skill_stack[i]->clone());
 	}
-	return (nullptr);
+	return (0);
 }

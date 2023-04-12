@@ -13,10 +13,10 @@ private:
 	AMateria* skill_stack[4];
 public:
 	MateriaSource();
-	~MateriaSource();
+	virtual ~MateriaSource();
 
 	virtual void	learnMateria(AMateria *learn);
-	virtual AMateria* createMateria(std::string type) const;
+	virtual AMateria* createMateria(std::string const type);
 };
 
 
