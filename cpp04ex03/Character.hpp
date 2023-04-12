@@ -23,7 +23,6 @@ public:
 private:
 	std::string	_name;
 	AMateria*	inventory[4];
-	// inventory
 };
 
 

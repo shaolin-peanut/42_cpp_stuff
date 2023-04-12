@@ -9,6 +9,7 @@ Character::Character(std::string name)
 {
 	for (int i = 0; i < 4; i++)
 		inventory[i] = 0;
+	std::cout << "Character constructor called: " << name << std::endl;
 }
 
 Character::Character(Character &copy)
@@ -23,6 +24,7 @@ Character::Character(Character &copy)
 				inventory[i] = copy.inventory[i]->clone();
 		}
 	}
+	std::cout << "Character copy constructor called" << std::endl;
 }
 
 Character &Character::operator=(Character &rhs) {
@@ -35,6 +37,7 @@ Character &Character::operator=(Character &rhs) {
 				inventory[i] = rhs.inventory[i]->clone();
 		}
 	}
+	std::cout << "Character assignment constructor called" << std::endl;
 	return *this;
 }
 
@@ -44,6 +47,7 @@ Character::~Character()
 		if (inventory[i] != 0)
 			delete inventory[i];
 	}
+	std::cout << "Character destructor called" << std::endl;
 }
 
 const std::string &Character::getName() const {
@@ -52,8 +56,11 @@ const std::string &Character::getName() const {
 
 void Character::equip(AMateria* m) {
 	for (int i = 0; i < 4; i++) {
-		if (inventory[i] == 0)
+		if (inventory[i] == 0 && m != 0) {
 			inventory[i] = m;
+			std::cout << _name << " equipped with " << m->getType() << std::endl;
+			return ;
+		}
 	}
 }
 
@@ -62,6 +69,7 @@ void Character::unequip(int idx) {
 	{
 		// todo: how do I keep unequiped materias addresses to delete later?
 		// maybe do my malloc midllemen
+		delete inventory[idx];
 		inventory[idx] = 0;
 	}
 }

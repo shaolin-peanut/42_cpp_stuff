@@ -8,6 +8,7 @@ MateriaSource::MateriaSource()
 {
 	for (int i = 0; i < 4; i++)
 		skill_stack[i] = 0;
+	std::cout << "MateriaSource constructor called" << std::endl;
 }
 
 MateriaSource::~MateriaSource()
@@ -16,13 +17,14 @@ MateriaSource::~MateriaSource()
 		if (skill_stack[i] != 0)
 			delete skill_stack[i];
 	}
-	//IMateriaSource::~IMateriaSource();
+	std::cout << "MateriaSource destructor called" << std::endl;
 }
 
 void	MateriaSource::learnMateria(AMateria *learn) {
 	for (int i = 0; i < 4; i++) {
-		if (skill_stack[i] != 0) {
+		if (skill_stack[i] == 0) {
 			skill_stack[i] = learn;
+			std::cout << "learned " << learn->getType() << std::endl;
 			return ;
 		}
 	}
@@ -32,8 +34,10 @@ void	MateriaSource::learnMateria(AMateria *learn) {
 
 AMateria* MateriaSource::createMateria(std::string const type) {
 	for (int i = 0; i < 4; i++) {
-		if (skill_stack[i]->getType() == type)
+		if (skill_stack[i]->getType() == type) {
+
 			return (skill_stack[i]->clone());
+		}
 	}
 	return (0);
 }
