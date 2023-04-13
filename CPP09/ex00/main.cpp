@@ -8,12 +8,13 @@ int main(int argc, char **argv)
 {
 	if (argc != 2)
 	{
-		std::cout << "Usage: ./bitcoin <amount>" << std::endl;
+		std::cout << "Usage: ./bitcoin <filename>" << std::endl;
 		return (1);
 	}
 
 	try {
-		BitcoinExchange exchange(argv[1]);
+		BitcoinExchange exchange;
+		exchange.convert(argv[1]);
 	}
 	catch (std::exception &e)
 	{

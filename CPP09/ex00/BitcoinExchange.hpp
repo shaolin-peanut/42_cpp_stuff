@@ -10,7 +10,7 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include <regex>
+#include <stdlib.h>
 
 class BitcoinExchange
 {
@@ -20,6 +20,10 @@ public:
 	BitcoinExchange();
 	BitcoinExchange(std::string filename);
 	~BitcoinExchange();
+
+	bool		parse_database(std::string filename);
+	bool		convert(std::string filename);
+	std::string closest_date_value(std::string& date);
 };
 
 
