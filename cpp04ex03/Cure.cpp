@@ -9,9 +9,7 @@ Cure::Cure()
 {}
 
 Cure::~Cure()
-{
-	AMateria::~AMateria();
-}
+{}
 
 AMateria* Cure::clone() const
 {

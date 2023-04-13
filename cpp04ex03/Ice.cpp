@@ -9,9 +9,7 @@ Ice::Ice()
 {}
 
 Ice::~Ice()
-{
-	AMateria::~AMateria();
-}
+{}
 
 AMateria* Ice::clone() const
 {
