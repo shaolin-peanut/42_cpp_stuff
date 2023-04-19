@@ -6,26 +6,33 @@
 
 static bool is_valid_date(const std::string& date)
 {
-	if (date.length() != 10 || date[4] != '-' || date[7] != '-') { // check the length and separators
+	if (/*date.length() != 10 || */date[4] != '-' || date[7] != '-') { // check the length and separators
+//		std::cout << (date.length() != 10) << std::endl;
+//		std::cout << (date[4] != '-') << std::endl;
+//		std::cout << (date[7] != '-') << std::endl;
+		std::cout << "error: length or separators" << std::endl;
 		return false;
 	}
-	int year, month, day;
+	int y, m, day;
 	std::istringstream ss(date);
 	char dash;
-	if (!(ss >> year >> dash >> month >> dash >> day)) { // try to extract year, month, and day
+	if (!(ss >> y >> dash >> m >> dash >> day)) { // try to extract y, month, and day
+		std::cout << "error: y, month, and day" << std::endl;
 		return false;
 	}
-	if (year < 1900 || year > 9999 || month < 1 || month > 12 || day < 1) { // check the range of year, month, and day
+	if (y < 0000 || y > 9999 || m < 1 || m > 12 || day < 1) { // check the range of year, m, and day
+		std::cout << "error: range of year, m, and day" << std::endl;
 		return false;
 	}
 	int daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; // array to hold the number of days in each month
-	if (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)) { // check if the year is a leap year
-		daysInMonth[1] = 29; // set February to have 29 days in a leap year
+	if (y % 4 == 0 && (y % 100 != 0 || y % 400 == 0)) { // check if the year is a leap year
+		daysInMonth[1] = 29; // set February to have 29 days in a leap
+
 	}
-	if (day > daysInMonth[month - 1]) { // check if the day is valid for the given month
+	if (day > daysInMonth[m - 1]) { // check if the day is valid for the given month
+		std::cout << "error: day is invalid for the given month" << std::endl;
 		return false;
 	}
-
 	return true;
 }
 
@@ -64,6 +71,12 @@ BitcoinExchange::BitcoinExchange()
 {
 	if (!parse_database("data.csv")) {
 		throw std::runtime_error("Error parsing the database");
+	} else {
+//		std::cout << "Historical prices:" << std::endl;
+//		for (std::map<std::string, float>::iterator it = _rates.begin(); it != _rates.end(); ++it) {
+//			std::cout << it->first << " " << it->second << std::endl;
+//		}
+
 	}
 }
 
@@ -107,7 +120,6 @@ bool BitcoinExchange::parse_database(std::string filename)
 		price_stream >> price_value;
 		//_rates.insert(std::make_pair(date, price_value));
 		_rates[date] = price_value;
-		return (true);
 	}
 	return true;
 }
@@ -158,8 +170,15 @@ bool BitcoinExchange::convert(std::string filename) {
 		// convert price and value to float
 		float fprice = _rates[closest_date_value(date)];
 		float fvalue = atof(value.c_str());
-		// print the result
-		std::cout << date << "|" << value << "|" << fprice * fvalue << std::endl;
+		if (!fprice || !fvalue) {
+			std::cout << "Error: " << fprice << " " << fvalue << std::endl;
+			continue;
+		}
+
+		// convert price and value to float
+		// print the resul
+		std::cout << date << " | " << value << " | " << std::fixed << fprice * fvalue << std::endl;
+
 	}
 	return true;
 }
