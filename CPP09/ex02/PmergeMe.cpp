@@ -21,12 +21,30 @@ PmergeMe::PmergeMe(std::string const &str) {
             input_data.push_back(std::stoi(token));
         }
     }
+    std::cout << "Before: ";
+    print_list(input_data);
 }
 
 PmergeMe::~PmergeMe() {
     input_data.clear();
     list_data.clear();
     deque_data.clear();
+}
+
+bool PmergeMe::are_results_equal() {
+    if (list_data.size() != deque_data.size())
+        return false;
+    else {
+        std::list<int>::iterator list_it = list_data.begin();
+        std::deque<int>::iterator deque_it = deque_data.begin();
+        while (list_it != list_data.end()) {
+            if (*list_it != *deque_it)
+                return false;
+            list_it++;
+            deque_it++;
+        }
+        return true;
+    }
 }
 
 double PmergeMe::list_merge() {
@@ -38,7 +56,9 @@ double PmergeMe::deque_merge() {
     return 0;
 }
 
-void PmergeMe::print_list() {
-
+void PmergeMe::print_list(std::list<int> &l) {
+    for (std::list<int>::iterator it = l.begin(); it != l.end(); it++)
+        std::cout << *it << " ";
+    std::cout << std::endl;
 }
 

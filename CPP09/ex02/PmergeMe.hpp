@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <sstream>
-#include <ctype.h>
+#include <cctype>
 #include <list>
 #include <deque>
 
@@ -21,8 +21,13 @@ public:
     double list_merge();
     double deque_merge();
     // print time of execution + size of list
-    void print_list();
+    static void print_list(std::list<int> &list);
     //std::ostream &operator<<(std::ostream &os, PmergeMe const &pmergeMe);
+    bool are_results_equal();
+
+    // sorted data
+    std::list<int> list_data;
+    std::deque<int> deque_data;
 private:
     PmergeMe();
     PmergeMe &operator=(PmergeMe const &copy);
@@ -30,8 +35,6 @@ private:
 
 
     std::list<int> input_data;
-    std::list<int> list_data;
-    std::deque<int> deque_data;
 };
 
 
