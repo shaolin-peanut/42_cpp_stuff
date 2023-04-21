@@ -18,8 +18,8 @@ public:
     ~PmergeMe();
 
     // sorts, prints results and returns time of execution
-    double list_merge();
-    double deque_merge();
+    void list_merge(std::list<int> &list, std::list<int>::iterator start, std::list<int>::iterator end);
+    void deque_merge(std::deque<int> &deque, std::deque<int>::iterator start, std::deque<int>::iterator end);
     // print time of execution + size of list
     static void print_list(std::list<int> &list);
     //std::ostream &operator<<(std::ostream &os, PmergeMe const &pmergeMe);
@@ -35,6 +35,7 @@ private:
 
 
     std::list<int> input_data;
+    int             sublist_size;
 };
 
 
