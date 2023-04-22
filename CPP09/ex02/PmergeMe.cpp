@@ -2,26 +2,49 @@
 // Created by Samuel Bars on 4/20/23.
 //
 
-#include <valarray>
 #include "PmergeMe.hpp"
 
 template <typename iter>
 void insertion_sort(iter begin, iter end) {
     // iterate through list starting at second element
-    for (iter it = std::next(begin); it != end; it++) {
+    for (iter it = begin; it != end; ++it) {
         int curr = *it;
-        iter prev = std::prev(it);
+        iter prev = it;
+        --prev;
         while (prev != begin && *prev > curr) {
-            std::iter_swap(prev, std::next(prev));
-            prev--;
+            // Swap the elements pointed to by prev and it
+            std::swap(*prev, *it);
+
+            // Decrement the iterators
+            --prev;
+            --it;
         }
-        // can be useful, include if insertion sort doesn't work
-        //if (prev == begin && *prev > curr) {
-        //            std::iter_swap(prev, std::next(prev));
-        //        }
-        *prev = curr;
+        if (prev == begin && *prev > curr) {
+            // Swap the elements pointed to by prev and it
+            std::swap(*prev, *it);
+        }
     }
 }
+
+template <typename source, typename Container>
+void copy_container(source &src, Container &dest, typename Container::iterator start)
+{
+    typename Container::iterator dst = start;
+    for (typename Container::iterator it = src.begin(); it != src.end(); ++it) {
+        if (dst == dest.end()) {
+            dest.insert(dst, *it);
+        } else {
+            *dst = *it;
+        }
+        dst++;
+    }
+}
+
+
+// can be useful, include if insertion sort doesn't work
+//if (prev == begin && *prev > curr) {
+//            std::iter_swap(prev, std::next(prev));
+//        }
 
 bool is_numeric(const std::string &str) {
     for (int i = 0; i < (int) str.length(); i++)
@@ -39,15 +62,20 @@ PmergeMe::PmergeMe(std::string const &str)
     std::string token;
     while (std::getline(ss, token, ' ')) {
         if (is_numeric(token)) {
-            input_data.push_back(std::stoi(token));
+            input_data.push_back(std::atoi(token.c_str()));
         }
     }
     // print it
     std::cout << "Before: ";
     print_list(input_data);
 
+    // copy input data to list and deque
+    copy_container<std::list<int>, std::list<int> >(input_data, list_data, list_data.begin());
+    copy_container<std::list<int>, std::deque<int> >(input_data, deque_data, deque_data.begin());
+
     // init sublist size, first number is max, second is min
     sublist_size = std::max(std::min(static_cast<int>(std::sqrt(input_data.size())), 60), 5);
+
 }
 
 PmergeMe::~PmergeMe() {
@@ -86,21 +114,46 @@ function merge_insert_sort(container, begin, end)
     end if
 end function
 */
-void
-PmergeMe::list_merge(std::list<int> &list, std::list<int>::iterator start, std::list<int>::iterator end) {
+
+template <typename Container>
+void PmergeMe::merge_step(Container &dest, typename Container::iterator start, typename Container::iterator middle, typename Container::iterator end) {
+    Container temp;
+    typename Container::iterator it1 = start;
+    typename Container::iterator it2 = middle;
+
+    while (it1 != middle || it2 != end) {
+        if (it1 == middle) {
+            temp.push_back(*it2);
+            it2++;
+        }
+        else if (it2 == end || *it1 < *it2) {
+            temp.push_back(*it1);
+            it1++;
+        }
+        // sublist 2 item smaller than 1's, add sublist 2 item
+        else {
+            temp.push_back(*it2);
+            it2++;
+        }
+    }
+    // copy temp list into original list
+    copy_container(temp, *dest, start);
+}
+
+template <typename Container>
+void PmergeMe::merge_sort(typename Container &dest, typename Container::iterator start, typename Container::iterator end) {
     int size = std::distance(start, end);
 
     if (size <= sublist_size) { // perform insert-sort
-        insertion_sort<std::list<int>::iterator>(start, end);
+        insertion_sort<typename Container::iterator>(start, end);
     }
     else { // recursive call to split function further
-
+        typename Container::iterator middle = std::next(start, size / 2);
+        list_merge(start, middle);
+        list_merge(middle, end);
+        merge_step(dest, start, middle, end);
     }
-    return 1; // update this with real times
-}
 
-void PmergeMe::deque_merge(std::deque<int> &deque, std::deque<int>::iterator start, std::deque<int>::iterator end) {
-    return 1; // update this with real times
 }
 
 void PmergeMe::print_list(std::list<int> &l) {
