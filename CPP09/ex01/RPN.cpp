@@ -20,7 +20,7 @@ RPN::RPN(std::string const &str)
 		if (ret != -1)
 			std::cout << "Result: " << ret << std::endl;
 		else
-			exit(-1);
+			throw std::invalid_argument("Usage: ./RPN \"numbers operators\"");
 	}
 	else
 		std::cout << "Error: Invalid input" << std::endl;
@@ -38,6 +38,10 @@ int RPN::evaluate(const std::string &str)
 	{
 		if (token == "+" || token == "-" || token == "*" || token == "/")
 		{
+            if (pile.size() < 2) {
+                std::cout << "Error: Please input numbers BEFORE operators" << std::endl;
+                return (-1); // return an error code
+            }
 			int a = pile.top();
 			pile.pop();
 			int b = pile.top();
