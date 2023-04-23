@@ -4,36 +4,49 @@
 
 #include "PmergeMe.hpp"
 
+void	print_time(clock_t start, clock_t end, int size, std::string type)
+{
+	std::cout << "Time to process a range of " << size << " elements with std::"
+	<< type << " : " << static_cast<double>(end - start) / CLOCKS_PER_SEC
+	<< " seconds" << std::endl;
+}
+
 int main(int argc, char **argv)
 {
-    if (argc != 2) {
-        std::cout << "Usage: ./pmerge \"numbers string\"" << std::endl;
+    if (argc < 2) {
+        std::cout << "Usage: ./PmergeMe \"10 9 8 7 6 5 4 3 2 1 \"" << std::endl;
         return 1;
     }
     else {
         try {
-            PmergeMe pmergeMe(argv[1]);
+			//start clocks
 
-            // sort list
-            std::list<int>::iterator lbegin = pmergeMe.list_data.begin();
-            std::list<int>::iterator lend = pmergeMe.list_data.end();
-            pmergeMe.merge_sort(pmergeMe.list_data, lbegin, lend);
-            // sort deque
-            std::deque<int>::iterator dbegin = pmergeMe.deque_data.begin();
-            std::deque<int>::iterator dend = pmergeMe.deque_data.end();
-            pmergeMe.merge_sort(pmergeMe.deque_data, dbegin, dend);
+			PmergeMe pmergeMe(argc, argv);
+
+			// sort list
+			clock_t start_list = clock();
+			std::list<int> &list = pmergeMe.get_list_data();
+			pmergeMe.merge_sort(list, list.begin(), list.end());
+			clock_t end_list = clock();
+
+			// sort deque
+			clock_t start_deque = clock();
+			std::deque<int> &deque = pmergeMe.get_deque_data();
+			pmergeMe.merge_sort(deque, deque.begin(), deque.end());
+			clock_t end_deque = clock();
 
             // check for non-equal results in list vs deque (shouldn't happen)
             if (!pmergeMe.are_results_equal()) {
-                return 1; }
+				throw std::invalid_argument("Results are not equal");
+			}
 
             // print "After: <sorted list>"
-            std::cout << "After: "; PmergeMe::print_list(pmergeMe.list_data);
+            std::cout << "After: "; PmergeMe::print_list(list);
 
-            // calculate time it took and print
-//        std::cout << "List merge sort took: " << list_ret << " seconds" << std::endl;
-//        std::cout << "Deque merge sort took: " << deque_ret << " seconds" << std::endl;
-        }
+
+			print_time(start_list, end_list, list.size(), "list");
+			print_time(start_deque, end_deque, deque.size(), "deque");
+		}
         catch (std::exception &e) {
             std::cout << e.what() << std::endl;
             return 1;

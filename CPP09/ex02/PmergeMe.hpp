@@ -12,19 +12,21 @@
 #include <list>
 #include <deque>
 #include <valarray>
-#include <algorithm>
+#include <ctime>
+//#include <chrono>
+//#include <algorithm>
 
 template <typename source, typename Container>
 void copy_container(source &src, Container &dest, typename Container::iterator start);
 
 class PmergeMe {
 public:
-    PmergeMe(std::string const &str);
+    PmergeMe(int argc, char **argv);
     ~PmergeMe();
 
     // sorts, prints results and returns time of execution
     template <typename Container>
-    void merge_sort(typename Container &dest, typename Container::iterator start, typename Container::iterator end);
+    void merge_sort(Container &dest, typename Container::iterator start, typename Container::iterator end);
     template <typename Container>
     void merge_step(Container &dest, typename Container::iterator start, typename Container::iterator middle, typename Container::iterator end);
 
@@ -33,6 +35,8 @@ public:
     //std::ostream &operator<<(std::ostream &os, PmergeMe const &pmergeMe);
     bool are_results_equal();
 
+    std::list<int> &get_list_data();
+    std::deque<int> &get_deque_data();
 private:
     PmergeMe();
     PmergeMe &operator=(PmergeMe const &copy);
@@ -46,6 +50,8 @@ private:
 
     int             sublist_size;
 };
+
+#include "PmergeMe.tpp"
 
 
 #endif //INC_42_CPP_STUFF_PMERGEME_H
