@@ -6,10 +6,7 @@
 
 static bool is_valid_date(const std::string& date)
 {
-	if (/*date.length() != 10 || */date[4] != '-' || date[7] != '-') { // check the length and separators
-//		std::cout << (date.length() != 10) << std::endl;
-//		std::cout << (date[4] != '-') << std::endl;
-//		std::cout << (date[7] != '-') << std::endl;
+	if (date[4] != '-' || date[7] != '-') { // check the length and separators
 		std::cout << "error: length or separators" << std::endl;
 		return false;
 	}
@@ -20,7 +17,7 @@ static bool is_valid_date(const std::string& date)
 		std::cout << "error: y, month, and day" << std::endl;
 		return false;
 	}
-	if (y < 0000 || y > 9999 || m < 1 || m > 12 || day < 1) { // check the range of year, m, and day
+	if (y < 0000 || y > 9999 || m < 1 || m > 12 || day < 1 || day > 31) { // check the range of year, m, and day
 		std::cout << "error: range of year, m, and day" << std::endl;
 		return false;
 	}
@@ -71,12 +68,6 @@ BitcoinExchange::BitcoinExchange()
 {
 	if (!parse_database("data.csv")) {
 		throw std::runtime_error("Error parsing the database");
-	} else {
-//		std::cout << "Historical prices:" << std::endl;
-//		for (std::map<std::string, float>::iterator it = _rates.begin(); it != _rates.end(); ++it) {
-//			std::cout << it->first << " " << it->second << std::endl;
-//		}
-
 	}
 }
 
@@ -86,19 +77,15 @@ BitcoinExchange::~BitcoinExchange() {
 
 bool BitcoinExchange::parse_database(std::string filename)
 {
-	// storing the reference data to a map
-	// testing if the map is correctly filled
 	std::ifstream file(filename.c_str());
 	if (!file.is_open())
 		return false;
 
 	std::string line;
-	// Parcourir les lignes du fichier
 	while (std::getline(file, line)) {
 		std::istringstream iline(line);
 		std::string date, price;
 
-		// Extraire la date et vérifier sa validité
 		std::getline(iline, date, ',');
 		if (date == "date") { // skip the header line
 			continue; } // go to the next line
@@ -107,18 +94,15 @@ bool BitcoinExchange::parse_database(std::string filename)
 			continue;
 		}
 
-		// Extraire le prix et vérifier sa validité
 		std::getline(iline, price, ',');
 		if (!is_valid_historical_price(price)) {
 			std::cerr << "parse: Prix invalide : " << price << std::endl;
 			continue;
 		}
 
-		// Convertir le prix en float et l'ajouter à la map _rates
 		std::istringstream price_stream(price);
 		float price_value;
 		price_stream >> price_value;
-		//_rates.insert(std::make_pair(date, price_value));
 		_rates[date] = price_value;
 	}
 	return true;
@@ -128,7 +112,7 @@ std::string	BitcoinExchange::closest_date_value(std::string& date)
 	std::string closest_date = "";
 
 	std::map<std::string, float>::iterator it = _rates.find(date);
-	if (it == _rates.end())
+	if (it == _rates.end()) // if it == equal means no exact match was found, so seek the closest date
 	{
 		std::map<std::string, float>::iterator it2 = _rates.begin();
 		while (it2 != _rates.end())
@@ -140,7 +124,9 @@ std::string	BitcoinExchange::closest_date_value(std::string& date)
 		}
 		return (closest_date);
 	}
-	return (it->first);
+	else { // if match found, return date string
+		return (it->first);
+	}
 }
 
 bool BitcoinExchange::convert(std::string filename) {
@@ -151,7 +137,7 @@ bool BitcoinExchange::convert(std::string filename) {
 	std::string line;
 	while (std::getline(file, line)) {
 		if (line.substr(0, 4) == "date") {
-			continue;  // Skip the header line
+			continue;  // skip header line
 		}
 
 		std::istringstream iline(line);
@@ -176,7 +162,6 @@ bool BitcoinExchange::convert(std::string filename) {
 		}
 
 		// convert price and value to float
-		// print the resul
 		std::cout << date << " | " << value << " | " << std::fixed << fprice * fvalue << std::endl;
 
 	}

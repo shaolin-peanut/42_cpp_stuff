@@ -10,7 +10,7 @@
 #include <sstream>
 #include <string>
 #include <map>
-#include <stdlib.h>
+#include <cstdlib>
 
 class BitcoinExchange
 {
